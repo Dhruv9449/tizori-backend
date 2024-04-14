@@ -21,8 +21,6 @@ WORKDIR /usr/src/app
 
 COPY --from=builder /usr/src/app/bin/tizori ./bin/tizori
 
-COPY --from=builder /usr/src/app/credentials ./credentials
-
 RUN chmod +x ./bin/tizori
 
 CMD ["./bin/tizori", "run"]
