@@ -93,3 +93,8 @@ func ValidateUsername(username string) (bool, string) {
 
 	return true, ""
 }
+
+// Set roles for user
+func (u *User) SetRoles(roles []Role) error {
+	return database.DB.Model(&u).Association("Roles").Replace(roles)
+}

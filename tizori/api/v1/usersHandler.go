@@ -146,6 +146,13 @@ func updateUser(c *fiber.Ctx) error {
 		user.Name = body.Name
 	}
 
+	err = user.Save()
+	if err != nil {
+		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
+			"detail": err.Error(),
+		})
+	}
+
 	// Update the roles
 	var roles []models.Role
 	for _, roleId := range body.Roles {
@@ -157,10 +164,7 @@ func updateUser(c *fiber.Ctx) error {
 		}
 		roles = append(roles, *role)
 	}
-	user.Roles = roles
-
-	err = user.Save()
-	if err != nil {
+	if err = user.SetRoles(roles); err != nil {
 		return c.Status(fiber.StatusInternalServerError).JSON(fiber.Map{
 			"detail": err.Error(),
 		})
