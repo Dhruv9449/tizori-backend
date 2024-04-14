@@ -47,8 +47,7 @@ func getApplication(c *fiber.Ctx) error {
 
 func createApplication(c *fiber.Ctx) error {
 	type requestBody struct {
-		Name  string `json:"name"`
-		Owner string `json:"owner"`
+		Name string `json:"name"`
 	}
 
 	var body requestBody
