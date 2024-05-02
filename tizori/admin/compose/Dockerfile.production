@@ -1,0 +1,62 @@
+# Define the base image for the final stage
+FROM python:3.12-slim-bullseye as python
+
+# Python build stage
+FROM python as python-build-stage
+
+# Set environment variables for Python
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+# Install system dependencies needed for building Python packages
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    build-essential \
+    libpq-dev \
+    gettext \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy the requirements file to the build stage
+COPY ./requirements.txt /requirements.txt
+
+# Create Python dependency wheels
+RUN pip install --upgrade pip \
+    && pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r /requirements.txt
+
+# Python 'run' stage
+FROM python as python-run-stage
+
+# Set environment variables for Python
+ENV PYTHONUNBUFFERED 1
+ENV PYTHONDONTWRITEBYTECODE 1
+
+# Install system dependencies needed at runtime
+RUN apt-get update && apt-get install --no-install-recommends -y \
+    libpq-dev \
+    gettext \
+    && apt-get clean \
+    && rm -rf /var/lib/apt/lists/*
+
+# Copy Python dependency wheels from the build stage
+COPY --from=python-build-stage /wheels /wheels
+
+# Install Python dependencies from wheels
+RUN pip install --no-cache-dir --no-index --find-links=/wheels -r /requirements.txt
+
+# Set the working directory in the container
+WORKDIR /app
+
+# Copy the Django project files to the container
+COPY . /app
+
+# Expose the port the app runs on
+EXPOSE 8000
+
+# Migrate the database
+RUN python manage.py migrate
+
+# Collect static files (if needed)
+RUN python manage.py collectstatic --noinput
+
+# Command to run the application using gunicorn
+CMD ["gunicorn", "--bind", "0.0.0.0:8000", "admin.wsgi:application"]

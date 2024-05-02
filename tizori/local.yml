@@ -3,13 +3,29 @@ version: '3'
 services:
   tizori-api:
     build:
-      context: .
+      context: ./app
       dockerfile: Dockerfile
     container_name: tizori-api
     ports:
       - 80:3000
     volumes:
-      - ./:/user/src/app
+      - ./app:/user/src/app
+    env_file:
+      - ./.env/.local
+    depends_on:
+      - postgres
+    networks:
+      - tizori-network
+  
+  admin:
+    build:
+      context: ./admin
+      dockerfile: ./compose/Dockerfile.local
+    container_name: tizori-admin
+    ports:
+      - 8080:8080
+    volumes:
+      - ./admin:/user/src/app:z
     env_file:
       - ./.env/.local
     depends_on:

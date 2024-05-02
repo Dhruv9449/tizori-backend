@@ -10,6 +10,7 @@ import (
 	tizoriCrypto "github.com/GDGVIT/Tizori-backend/internal/crypto"
 	"github.com/GDGVIT/Tizori-backend/internal/database"
 	"github.com/GDGVIT/Tizori-backend/internal/models"
+	"github.com/GDGVIT/Tizori-backend/internal/models/seeds"
 	"github.com/gofiber/fiber/v2"
 	"github.com/urfave/cli/v2"
 )
@@ -63,6 +64,16 @@ func (t *TizoriApp) initCliApp() {
 		Usage:   "Run the server",
 		Action: func(c *cli.Context) error {
 			t.webApp.Listen(t.env.fiberPort)
+			return nil
+		},
+	})
+
+	t.cliApp.Commands = append(t.cliApp.Commands, &cli.Command{
+		Name:    "seed",
+		Aliases: []string{"s"},
+		Usage:   "Seed the DB",
+		Action: func(c *cli.Context) error {
+			seeds.IntializeSeeds()
 			return nil
 		},
 	})

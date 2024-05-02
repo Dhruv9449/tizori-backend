@@ -35,12 +35,25 @@ http:
       tls:
         # https://docs.traefik.io/master/routing/routers/#certresolver
         certResolver: letsencrypt
+
+    admin-secure-router:
+      rule: "Host(`tizori-admin.dscvit.com`)"  # Change the host rule as needed
+      entryPoints:
+        - web-secure
+      service: tizori-admin
+      tls:
+        certResolver: letsencrypt
   
   services:
     tizori-api:
       loadBalancer:
         servers:
           - url: http://tizori-api:3000
+
+    tizori-admin:
+      loadBalancer:
+        servers:
+          - url: http://tizori-admin:8080
 
 providers:
   # https://docs.traefik.io/master/providers/file/
