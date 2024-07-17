@@ -17,6 +17,22 @@ services:
     networks:
       - tizori-network
     restart: always
+  
+  admin:
+    build:
+      context: ./admin
+      dockerfile: ./compose/Dockerfile.production
+    container_name: tizori-admin
+    ports:
+      - 8080:8080
+    volumes:
+      - ./admin:/user/src/app:z
+    env_file:
+      - ./.env/.production
+    depends_on:
+      - postgres
+    networks:
+      - tizori-network
 
   postgres:
     image: postgres
