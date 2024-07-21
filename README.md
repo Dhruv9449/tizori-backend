@@ -37,14 +37,10 @@
 <br>
 
 ## Key Features
-- [x] User Authenitication using Google Oauth2
-- [x] Timetable detection from VTOP timetable page text
-- [x] Add and remove friends using friend requests
-- [x] User search to friend other users
-- [x] Display friends' timetable
-- [x] Show mutual friends
-- [x] Friend suggestions based on mutual friends
-- [x] CLI application to manage the web api
+- [x] User management and authentication using JWT
+- [x] Role-based access control (RBAC) and role management
+- [x] Applications management
+- [x] Credentials management and encryption using AES
 
 <br>
 <br>
@@ -97,6 +93,12 @@ Following environment variables need to be configured -
 - `POSTGRES_PORT` - Port for postgres database, default value is `5432`
 - `JWT_SECRET` - JWT secret key that will be used to sign the tokens
 - `AES_KEY` - AES key used for encryption and decryption of credentials
+
+### Seed the database
+Use the following command to seed the database with initial roles data -  
+```bash
+./tizori.sh seed
+```
 
 <br>
 <br>
