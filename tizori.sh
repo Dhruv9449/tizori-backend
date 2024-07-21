@@ -39,6 +39,7 @@ if [ -z "$command" ]; then
     echo "  down: Stop the server"
     echo "  restart: Restart the server"
     echo "  cli: Run a command inside the container"
+    echo "  seed: Seed the database"
     echo "  logs: Show the logs of the container"
     exit 1
 fi
@@ -76,5 +77,11 @@ fi
 if [ "$command" = "cli" ]; then
     shift # Discard the first argument
     docker compose -f "$file" run --rm tizori-api ./bin/tizori "$@"
+    exit 1
+fi
+
+if [ "$command" = "seed" ]; then
+    echo "Seeding database"
+    docker compose -f "$file" run --rm tizori-api ./bin/tizori seed
     exit 1
 fi

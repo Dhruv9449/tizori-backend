@@ -39,6 +39,7 @@ if "%command%" == "" (
     echo   down: Stop the server
     echo   restart: Restart the server
     echo   cli: Run a command inside the container
+    echo   seed: Seed the database
     echo   logs: Show the logs of the container
     exit /b 1
 )
@@ -76,5 +77,12 @@ REM Management commands
 if "%command%" == "cli" (
     shift
     docker compose -f "%file%" run --rm tizori-api ./bin/tizori %*
+    exit /b 1
+)
+
+REM Seed command
+if "%command%" == "seed" (
+    echo Seeding database
+    docker compose -f "%file%" run --rm tizori-api ./bin/tizori seed
     exit /b 1
 )
