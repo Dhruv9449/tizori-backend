@@ -168,6 +168,7 @@ tizori.cmd cli <command>
 				<a href = "mailto:dhruvshahrds@gmail.com" target="_blank">
 					<img src = "https://www.iconninja.com/files/312/807/734/share-send-email-chat-circle-message-mail-icon.svg" width="36" height="36" 
 					alt="Email"/>
+				</a>
 			</p>
 		</td>
 	</tr>
